@@ -1,0 +1,12 @@
+KJO, 2014-02-01
+
+make BLFOR do more than one at a time, eg give it a number of qx paths and calc the insurance.
+
+make BLFOR do more than one interest rate scenario at a time.
+
+insurance and annuity wrapper for BLFOR.
+
+convert OYT to Rcpp. in general, try to convert all of them to Rcpp.
+
+How to write the c++ code in it's own file? how to compile it, and keep a compiled version?
+

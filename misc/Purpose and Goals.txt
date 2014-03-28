@@ -1,0 +1,3 @@
+Purpose
+
+A fast, flexible, and open library to make actuarial calculations.

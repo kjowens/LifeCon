@@ -1,0 +1,32 @@
+Programing Plan
+
+1. Make BLFORRcpp iterate over a arrays.
+	first, just be able to take more than one vector of q_x's. a new vector of q's for each row.
+	then, add another dimention (of possibly length one) of discount factors to be used so that more than one "interest rate scenario" can be calculated at one time.
+	
+question: what's the best way to parallel multiple scenarios? the first pass may need to be re-written if it doesn't scale well to paralell processing.
+
+2. c++ function to translate spot/zero-coupon curve into discount factors vector to be used in recursion formula. we would probably also have to either write or leverage another algorithm to translate par curves to spot curves.
+
+3. wrappers for BLFOR to calculate insurance, annuities, and reserves. make it easy to use for simple things, but make it flexible enough that if someone wanted to enter parameters it could be possible.
+	try to have the fewest required arguments possible, maybe only age and some distribution/life table rule, then have a second, optional, argument of a list of parameters. 
+	maybe interest rate term structure would also be a required argument
+	i think having the optional parameters as one argument that is a list would be good because it would make it easier to pass to a c++ function. it would also be easier to fill with parameters from a "model point" file, i.e. a data frame of policies and the information about them.
+	optional parameters i'm thinking about include: payment frequency, fractional age assumption, expenses, margins.
+
+4. MYSQL interface for policy data and results storage? we should be careful about coding data structure dependencies.
+
+5. a goal for potentially releasing something might be building a structure to do a profit test.
+
+6. c++ function to step through time going forward to for profit test/"emerging surplus". like with backwards recursion, make a core forwards recursion function, then build wrappers with as few required arguments, and an optional parameters list argument.
+
+7. handeling of multiple decrements. there are many ways to go with this
+	functions to handle basic assumptions for fractional age assumptions. maybe not consider hyperbolic assumption?
+	combining arbitrary numbers of uniform and CF single decrements into multiple decrements would need efficient computation of partial gamma integrals; but probably not practical.
+	most practical application would have lapses at the end/begining of periods, then just use many small (monthly) periods.
+	focus on translating single decrement tables to multiple decrement tables seems most practical. when building assumptions about lapses i think people usually think in terms of single decrements.
+	continuous markov chain model with numerical kolmogorov forward equation? idk how much it's used in practice now, but for prototyping it could be very useful. wrappers to calculate annuities and insurance from an output object could make it even more useful.
+
+8. i'd like to try to leverage other R packages when possible, except if it's trivial or there is a really good reason why it wouldn't work for our purposes.
+
+9. also, keep an eye towards "being compliant"/"playing nice" with other packages. for example, there are some packages focused on assets, and if our code can use the output from those packages it will be easier for our package to be adopted.
