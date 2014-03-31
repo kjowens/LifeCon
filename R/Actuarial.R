@@ -1,229 +1,3 @@
-## The following three functions are related to accessing SoA database of mortality tables
-## TbSearch, TbDetails, Tb
-## Of these TbSearch and Tb are meant to be public functions and TbDetails private.
-## One has to have the tables.dat and tables.ndx files in the working directory
-
-        ## Allows you to search the database
-        ## Useful to identify the Table No.
-
-        TbSearch<-function(NameStr,CountryStr,UsageStr)
-            {
-                zz<-file("tables.ndx","rb");
-                readChar(zz,58);
-                k<-1;
-                for (i in 1:((file.info("tables.ndx")$size-58)/90))
-                {
-                    TbNo=readBin(zz,integer(),size=4);
-                    TbName=readChar(zz,50);
-                    TbOffset=readBin(zz,integer(),size=4);
-                    TbCountry=readChar(zz,31);
-                    TbUsage=readBin(zz,integer(),size=1);
-                    if (any(grep(NameStr,TbName,ignore.case=TRUE,perl=TRUE)) && any(grep(CountryStr,TbCountry,ignore.case=TRUE,perl=TRUE)) &&
-                        any(grep(UsageStr,as.character(TbUsage),ignore.case=TRUE,perl=TRUE))
-                    )
-                    {
-                        if (k==1)
-                        {
-                            No<-as.vector(TbNo);
-                            Name<-as.vector(TbName);
-                            Country<-as.vector(TbCountry);
-                            Usage<-as.vector(TbUsage);
-                        }
-                        else
-                        {
-                            No[k]=TbNo;
-                            Name[k]=TbName;
-                            Country[k]=TbCountry;
-                            Usage[k]=TbUsage;
-                        }
-                        k=k+1;
-                    }
-                }
-                close(zz);
-                if (k!=1)
-                {
-                    dummy<-data.frame(No=No,Name=Name,Country=Country,Usage=Usage);
-                    #dummy<-dummy[order(dummy$Country,dummy$Usage,dummy$No), , , ];
-                    dummy<-list(Country=dummy$Country,Usage=dummy$Usage,Name=dummy$Name,No=dummy$No);
-                }
-                else
-                {
-                    dummy<-list(Messages="Search Resulted in Zero Entries");
-                }
-                data.frame(dummy)
-            }
-
-        ## Reads the index - Auxilliary Function for Tb
-
-        TbDetails<-function(TbSearch)
-            {
-                zz<-file("tables.ndx","rb");
-                readChar(zz,58);
-
-                TbNo=0;
-                while (TbNo!=TbSearch)
-                {
-                    TbNo=readBin(zz,integer(),size=4);
-                    if (TbNo!=TbSearch)
-                        {
-                            readChar(zz,86,useBytes = TRUE);
-                        }
-                    else
-                        {
-                            TbName=readChar(zz,50);
-                            TbOffset=readBin(zz,integer(),size=4);
-                            TbCountry=readChar(zz,31);
-                            TbUsage=readBin(zz,integer(),size=1);
-                        }
-                }
-                close(zz);
-                list(No=TbNo,Offset=TbOffset,Usage=TbUsage,Name=TbName,Country=TbCountry)
-            }
-
-        ## Gets a Table from the SOADB in the form of a nice list
-        ## The structure of the list is apparent from the final lines of code of Tb
-        ## This depends on TbDetails
-        ## The index and data file are assumed to be in the working directory
-        ## The file names have been assumed to be the same as they are distributed by the SOA
-
-		Tb <- function(TbSearch)
-		            {
-		                TbOffset<-TbDetails(TbSearch)["Offset"];
-		                RNo<-0;
-
-		                zz<-file("tables.dat","rb");
-		                readChar(zz,TbOffset,useBytes = TRUE);
-
-		                while (RNo!=9999)
-		                {
-		                    RNo=readBin(zz,integer(),size=2);
-		                    if (RNo!=9999)
-		                    {
-		                        RLen = readBin(zz,integer(),size=2);
-		                        if (RNo==2)
-		                            { ##32-bit integer
-		                                TbNo=readBin(zz,integer(),size=4);
-		                            }
-		                        else if ((RNo<=11) || (RNo==19))
-		                            { ## Text Fields
-		                                if (RNo<=11)
-		                                {
-		                                    switch(RNo,
-		                                        TbName<-readChar(zz,RLen,useBytes = TRUE),
-		                                        ,
-		                                        TbType<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbContributor<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbSource<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbVolume<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbObsn<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbUnit<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbMethod<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbRef<-readChar(zz,RLen,useBytes = TRUE),
-		                                        TbMisc<-readChar(zz,RLen,useBytes = TRUE)
-		                                    )
-
-		                                }
-		                                else
-		                                {
-		                                    TbCountry<-readChar(zz,RLen,useBytes = TRUE);
-		                                }
-		                            }
-		                        else if (RNo<= 16)
-		                            { ## 16-bit integer
-		                                switch((RNo-11),
-		                                    MinAge<-readBin(zz,integer(),size=2),
-		                                    MaxAge<-readBin(zz,integer(),size=2),
-		                                    SelPrd<-readBin(zz,integer(),size=2),
-		                                    MaxSAge<-readBin(zz,integer(),size=2),
-		                                    NoDec<-readBin(zz,integer(),size=2)
-		                                    )
-		                            }
-		                        else if (RNo==17)
-		                            { ## 8-byte IEEE floating point
-		                                qa<-as.array(readBin(zz,double(),n=RLen/8,size=8));
-		                            }
-		                        else if (RNo==18)
-		                            { ## 32-bit unsigned integer
-		                                TbHash=readBin(zz,integer(),size=4);
-		                            }
-		                        else
-		                            { ## Short
-		                                TbUse=readBin(zz,integer(),size=1);
-		                            }
-
-		                    }
-		                    else
-		                    { ## Re-Format q
-		                    ## Three cases - Aggegrate
-		                    ##             - Select - MaxSAge = MaxAge
-		                    ##             - Select - MaxSAge <MaxAge
-		                        if (SelPrd>0)
-		                        {
-		                            if (MaxSAge<MaxAge)
-		                            {
-		                                ## Just the Select Rates
-		                                    qs<-t(array(qa[c(1:(SelPrd*(MaxSAge-MinAge+1))) + trunc(c(0:(SelPrd*(MaxSAge-MinAge+1)-1))/SelPrd)],c(SelPrd,(MaxSAge-MinAge+1))));
-		                                ## Just the Ultimate Rates
-		                                    qu<-array(qa[c((SelPrd+1)*c(1:(MaxSAge-MinAge+1)),(SelPrd+1)*(MaxSAge-MinAge+1)+c(1:(MaxAge-MaxSAge)))],c(MaxAge-(MinAge+SelPrd)+1));
-
-		                            }
-		                            else
-		                            {
-		                                ## Just the Select Rates
-		                                    qs<-t(array(qa[c(1:(SelPrd*(MaxSAge-MinAge+1))) + trunc(c(0:(SelPrd*(MaxSAge-MinAge+1)-1))/SelPrd)],c(SelPrd,(MaxSAge-MinAge+1))));
-		                                ## Just the Ultimate Rates
-		                                    qu<-array(qa[(SelPrd+1)*c(1:(MaxSAge-MinAge+1))],c(MaxAge-(MinAge+SelPrd)+1));
-		                            }
-		                        }
-		                        else
-		                        {
-		                            ## Do Nothing
-		                        }
-		                    }
-		                }
-		                ##Output Section
-		                if (inherits(try(TbSource,TRUE),'try-error'))
-		                {
-		                    TbSource<-"Missing Field";
-		                }
-		                if (inherits(try(TbVolume,TRUE),'try-error'))
-		                {
-		                    TbVolume<-"Missing Field";
-		                }
-		                if (inherits(try(TbObsn,TRUE),'try-error'))
-		                {
-		                    TbObsn<-"Missing Field";
-		                }                
-		                if (inherits(try(TbUnit,TRUE),'try-error'))
-		                {
-		                    TbUnit<-"Missing Field";
-		                }                
-		                TbData<-list(Country=TbCountry,Source=TbSource,Volume=TbVolume,Obsn=TbObsn,Unit=TbUnit);
-		                if (inherits(try(TbMethod,TRUE),'try-error'))
-		                {
-		                    TbMethod<-"Missing Field";
-		                }                
-		                if (inherits(try(TbRef,TRUE),'try-error'))
-		                {
-		                    TbRef<-"Missing Field";
-		                }                
-		                if (inherits(try(TbMisc,TRUE),'try-error'))
-		                {
-		                    TbMisc<-"Missing Field";
-		                }                                
-		                TbMetaData<-list(Name=TbName,Type=TbType,Use=TbUse,Method=TbMethod,NoDec=NoDec,Ref=TbRef,Misc=TbMisc);
-		                if (TbType=="S")
-		                    {
-		                        TbValues<-list(Meta=list(Type=TbType,MinAge=MinAge,MaxAge=MaxAge,SelPrd=SelPrd,MaxSAge=MaxSAge),Select=qs, Ultimate=qu);
-		                    }
-		                    else
-		                    {
-		                        TbValues<-list(Meta=list(Type=TbType,MinAge=MinAge,MaxAge=MaxAge),Aggregate=qa);
-		                    }
-		                    close(zz);
-		                list(Data=TbData,MetaData=TbMetaData,Values=TbValues)
-		            }
-
 ## The following two functions help simulate K (and hence T)
 ## The first function finds the Huffman optimal tree for a given discrete distribution
 ## The second function simulates a random vector of size k from the distribution which
@@ -306,7 +80,7 @@
                             r[l]=T[i,2];
                             }
                     }
-                    r   
+                    r
                 }
 
         ## The following function simulates a random vector of size k from the distribution which
@@ -345,7 +119,7 @@
 
         ## The following function simulates from a general discrete distribution using the alias method of Walker.
                 
-            RT<-function(q,FracAgeAssmpn,k)
+            RT<-function(q,FAA,k)
                 {
                     n<-length(q);
                     T<-WalkerTable(SK(q)[1:n]*q);
@@ -355,10 +129,10 @@
                         u<-r[l];
                         i<-ceiling(n*u);
                         if (u>=T[i,1]) {
-                            r[l]=i-1+IDF(q[i],FracAgeAssmpn,(u-T[i,1])/(1-T[i,1]));
+                            r[l]=i-1+IDF(q[i],FAA,(u-T[i,1])/(1-T[i,1]));
                         }
                         else {
-                            r[l]=T[i,2]-1+IDF(q[T[i,2]],FracAgeAssmpn,u/T[i,1]);
+                            r[l]=T[i,2]-1+IDF(q[T[i,2]],FAA,u/T[i,1]);
                             }
                     }
                     r   
@@ -366,21 +140,21 @@
 
         ## Inverse Distribution Function for fractional age assumptions
         
-            IDF<-function(q,FracAgeAssmpn,x)
+            IDF<-function(q,FAA,x)
                 {
-                    if (FracAgeAssmpn==0)
+                    if (FAA==0)
                         {
                             0
                         }
-                    else if (FracAgeAssmpn==1)
+                    else if (FAA==1)
                         {
                             1
                         }
-                    else if (FracAgeAssmpn==2)
+                    else if (FAA==2)
                         {
                             x
                         }
-                    else if (FracAgeAssmpn==3)
+                    else if (FAA==3)
                         {
                             if (q<0.000001)
                                 {
@@ -438,48 +212,48 @@
 ##      3 - Exponential
 ##      4 - Hyperboilic
 ## The functions defined are the following:
-##      a(q, FracAgeAssmpn)
-##          This gives E(T(x)|T(x)<1) - q->q_x - for the FracAgeAssmpn
+##      a(q, FAA)
+##          This gives E(T(x)|T(x)<1) - q->q_x - for the FAA
 ##          Useful for computing complete future life times
-##      M(q, FracAgeAssmpn,interest rate)
-##          This gives E(exp(-\delta T(x))|T(x)<1) - q->q_x - for the FracAgeAssmpn and \delta=ln(1+interest rate)
+##      M(q, FAA,interest rate)
+##          This gives E(exp(-\delta T(x))|T(x)<1) - q->q_x - for the FAA and \delta=ln(1+interest rate)
 ##          Note that E(exp(-\delta T(x))|T(x)<1)q_x is the APV of a one year term insurance on age x
 ##          Note that E(exp(-\delta T(x))|T(x)<1)q_x + \nu*p_x is the APV of a one year endowment insurance on age x
 ##          Useful for computing continuous insurances and continuous annuities
-##      am(q,m,FracAgeAssmpn,i)
+##      am(q,m,FAA,i)
 ##          The following function helps in computing one year temporary annuity due payable m-thly under any
 ##          of the standard fractional age assumptions. Using it we define below the OYT payable m-thly.
-##      OYT(q,m,FracAgeAssmpn,i)
+##      OYT(q,m,FAA,i)
 ##          OYT i.e. One Year Term insurance is valued using the function M and the function am
 
-        ##      a(q, FracAgeAssmpn)
-        ##          This gives E(T(x)|T(x)<1) - q->q_x - for the FracAgeAssmpn
+        ##      a(q, FAA)
+        ##          This gives E(T(x)|T(x)<1) - q->q_x - for the FAA
         ##          Useful for computing complete future life times
 
-                        a<-function(q,FracAgeAssmpn)
+                        a<-function(q,FAA)
                             {
-                                if (FracAgeAssmpn==0)
+                                if (FAA==0)
                                 {
                                     dum<-function(q)
                                     {
                                         0
                                     }
                                 }
-                                else if (FracAgeAssmpn==1)
+                                else if (FAA==1)
                                 {
                                     dum<-function(q)
                                     {
                                         1
                                     }
                                 }
-                                else if (FracAgeAssmpn==2)
+                                else if (FAA==2)
                                 {
                                     dum<-function(q)
                                     {
                                         0.5
                                     }
                                 }
-                                else if (FracAgeAssmpn==3)
+                                else if (FAA==3)
                                 {
                                     dum<-function(q)
                                     {
@@ -498,7 +272,7 @@
                                         Soln
                                     }
                                 }
-                                else if (FracAgeAssmpn==4)
+                                else if (FAA==4)
                                 {
                                     dum<-function(q)
                                     {
@@ -527,29 +301,29 @@
                             unlist(lapply(q,dum))
                         }
 
-        ##      M(q, FracAgeAssmpn,interest rate)
-        ##          This gives E(exp(-\delta T(x))|T(x)<1) - q->q_x - for the FracAgeAssmpn and \delta=ln(1+interest rate)
+        ##      M(q, FAA,interest rate)
+        ##          This gives E(exp(-\delta T(x))|T(x)<1) - q->q_x - for the FAA and \delta=ln(1+interest rate)
         ##          Note that E(exp(-\delta T(x))|T(x)<1)q_x is the APV of a one year term insurance on age x
         ##          Note that E(exp(-\delta T(x))|T(x)<1)q_x + \nu*p_x is the APV of a one year endowment insurance on age x
         ##          Useful for computing continuous insurances and continuous annuities
 
-                        M<-function(q,FracAgeAssmpn,i)
+                        M<-function(q,FAA,i)
                             {
-                                if (FracAgeAssmpn==0)
+                                if (FAA==0)
                                 {
                                     dum<-function(q)
                                     {
                                         1
                                     }
                                 }
-                                else if (FracAgeAssmpn==1)
+                                else if (FAA==1)
                                 {
                                     dum<-function(q)
                                     {
                                         1/(1+i)
                                     }
                                 }
-                                else if (FracAgeAssmpn==2)
+                                else if (FAA==2)
                                 {
                                     if (i<0.000001 )
                                     {
@@ -566,7 +340,7 @@
                                         }
                                     }
                                 }
-                                else if (FracAgeAssmpn==3)
+                                else if (FAA==3)
                                 {
                                     dum<-function(q)
                                     {
@@ -589,7 +363,7 @@
                                         Soln
                                     }
                                 }
-                                else if (FracAgeAssmpn==4)
+                                else if (FAA==4)
                                 {
                                     delta<-log(1+i);
                                     dum<-function(q)
@@ -633,8 +407,9 @@
         ## The following function helps in computing one year temporary annuity due payable m-thly under any
         ## of the standard fractional age assumptions. Using it we define below the OYT payable m-thly.
 
-                        am<-function(q,m,FracAgeAssmpn,i)
+                        am<-function(q,m,FAA,i)
                         {
+							# Pays 1 annually
                             delta<-log(1+i);
                             disc<-i/(1+i);
                             if (m!=0)
@@ -642,7 +417,7 @@
                                 im<-m*((1+i)^(1/m)-1);
                                 dm<-m*im/(m+im);
                             }
-                            if (FracAgeAssmpn==0)
+                            if (FAA==0)
                             {
                                 if (m==0)
                                 {
@@ -659,7 +434,7 @@
                                     }
                                 }
                             }
-                            else if (FracAgeAssmpn==1)
+                            else if (FAA==1)
                             {
                                 if (m==0)
                                 {
@@ -680,7 +455,7 @@
                                     }
                                 }
                             }
-                            else if (FracAgeAssmpn==2)
+                            else if (FAA==2)
                             {
                                 if (m==0)
                                 {
@@ -697,7 +472,7 @@
                                     }
                                 }
                             }
-                            else if (FracAgeAssmpn==3)
+                            else if (FAA==3)
                             {
                                 if (m==0)
                                 {
@@ -725,7 +500,7 @@
 
                                 }
                             }
-                            else if (FracAgeAssmpn==4)
+                            else if (FAA==4)
                             {
                                 if (m==0)
                                 {
@@ -784,16 +559,73 @@
         ## OYT i.e. One Year Term insurance is valued using the function M and the function am
 
 
-                        OYT<-function(q,m,FracAgeAssmpn,i)
+                        OYT<-function(q,m,FAA,i)
                         {
                             if (m!=0)
                             {
                                 dm<-m*(1-(1+i)^(-1/m));
-                                Soln<-1-dm*am(q,m,FracAgeAssmpn,i)-(1-q)/(1+i);
+                                Soln<-1-dm*am(q,m,FAA,i)-(1-q)/(1+i);
                             }
                             else
                             {
-                                Soln<-q*M(q,FracAgeAssmpn,i);
+                                Soln<-q*M(q,FAA,i);
                             }
                             Soln
                         }
+
+
+##########
+# 2014-03-30
+LCcheck.q <- function(q) {
+	if(prod(q>0)==0) {stop("at least one element of q is less than zero")}
+	# else if(q[length(q)]!=1) {warning("the last element in q is not 1")}
+}
+
+LCcheck.FAA <- function(FAA) {
+	if(! FAA %in% c(0,1,2,3,4)) {stop("The fractional age assumption that was entered is not one of the permitted assumptions. They are:
+		0 - Degenerate at 0
+		1 - Degenerate at 1
+		2 - Uniform(0,1)
+		3 - Exponential
+		4 - Hyperboilic")}
+}
+
+
+
+qOY2qmthly_OY <- function(q,m,FAA) {
+	# Converts a single one-year death probabily into a vector of mthly death probabilities
+	# m is the number of periods in each year
+	# h is the length of each period
+	#  the function returns:
+		 # for k = 0, 1, ... , m-1, Pr(T < (k+1)*h | T >= k*h)
+	if(round(m,0)!=m) {warning("m is not an integer, rounding it to the closest integer")}
+		m <- round(m,0)
+	if(m==0) {stop("m can't be zero")}
+	LCcheck.q(q)
+	LCcheck.FAA(FAA)
+	out <- rep(NA, m*length(q))
+	if(FAA==0) {
+		out <- c(q, rep(0, m*length(q)-1))
+	}
+	else if(FAA==1) {
+		out <- c(rep(0, m*length(q)-1), q)
+	}
+	h <- 1/m # h is used in the uniform and exponential fractional age assumptions
+	if(FAA==2) {
+		temp2 <- q*h
+		for (k in 0:(m-1)) {
+			out[k+1] <- temp2/(1 - k*temp2)
+		}
+	}
+	else if(FAA==3) {
+		out <- rep(1 - (1-q)^h, m*length(q))
+	}
+	else if(FAA==4) {
+		stop("The Hyperbolic fractional age assumption is not supported at this time.")
+	}
+	return(out)
+}
+
+qOY2qmthly <- function(q,m,FAA) {
+	unlist(lapply(q,FUN = function(x) qOY2qmthly_OY(q=x,m=m,FAA=FAA)))
+}
