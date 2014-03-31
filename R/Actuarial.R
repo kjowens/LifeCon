@@ -627,5 +627,6 @@ qOY2qmthly_OY <- function(q,m,FAA) {
 }
 
 qOY2qmthly <- function(q,m,FAA) {
+	# converts a VECTOR of one-year death probabilities to a vector of mthly 1/m duration death probabilities
 	unlist(lapply(q,FUN = function(x) qOY2qmthly_OY(q=x,m=m,FAA=FAA)))
 }

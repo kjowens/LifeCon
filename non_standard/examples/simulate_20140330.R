@@ -1,7 +1,3 @@
-f <- c(.1, .3, .4, .2)
-f
-ages <- c(1, 2, 3, 4)
-ages
-mydf <- data.frame(f, ages)
-mydf
-
+q <- c(.5)
+M(q,2,c(.05,.06))
+am(q,3,2,.05)
