@@ -20,7 +20,7 @@ SK.mh <- function(x=50, h=1, len=10, type="mh", params=list(A=.001, B=.1, c=1.05
 }
 
 myparams <- list(A=.001, B=.1, c=1.05)
-myp <- SK.mh(x=50, h=1, len=100, type="mh", params=myparams)
+myp <- SK.mh(x=50, h=1, len=10, type="mh", params=myparams)
 myp
 # plot(myp)
 
@@ -38,4 +38,5 @@ ptx2OYqs <- function(SK) {
 	return(out)
 }
 
-ptx2OYqs(myp)
+qOY <- ptx2OYqs(myp)
+qOY
