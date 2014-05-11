@@ -1,0 +1,382 @@
+
+R version 3.1.0 (2014-04-10) -- "Spring Dance"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin10.8.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.63 (6734) x86_64-apple-darwin10.8.0]
+
+[Workspace restored from /Volumes/amy/Users/kevinowens/.RData]
+[History restored from /Volumes/amy/Users/kevinowens/.Rhistory]
+
+Warning: dependency ‘BiocInstaller’ is not available
+also installing the dependencies ‘stringr’, ‘brew’, ‘formatR’, ‘highr’, ‘markdown’, ‘httr’, ‘memoise’, ‘whisker’, ‘evaluate’, ‘digest’, ‘testthat’, ‘roxygen2’, ‘knitr’, ‘rstudioapi’
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/stringr_0.6.2.tgz'
+Content type 'application/x-gzip' length 71095 bytes (69 Kb)
+opened URL
+==================================================
+downloaded 69 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/brew_1.0-6.tgz'
+Content type 'application/x-gzip' length 97854 bytes (95 Kb)
+opened URL
+==================================================
+downloaded 95 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/formatR_0.10.tgz'
+Content type 'application/x-gzip' length 42970 bytes (41 Kb)
+opened URL
+==================================================
+downloaded 41 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/highr_0.3.tgz'
+Content type 'application/x-gzip' length 25895 bytes (25 Kb)
+opened URL
+==================================================
+downloaded 25 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/markdown_0.6.5.tgz'
+Content type 'application/x-gzip' length 143067 bytes (139 Kb)
+opened URL
+==================================================
+downloaded 139 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/httr_0.3.tgz'
+Content type 'application/x-gzip' length 325741 bytes (318 Kb)
+opened URL
+==================================================
+downloaded 318 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/memoise_0.2.1.tgz'
+Content type 'application/x-gzip' length 14111 bytes (13 Kb)
+opened URL
+==================================================
+downloaded 13 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/whisker_0.3-2.tgz'
+Content type 'application/x-gzip' length 47145 bytes (46 Kb)
+opened URL
+==================================================
+downloaded 46 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/evaluate_0.5.3.tgz'
+Content type 'application/x-gzip' length 36190 bytes (35 Kb)
+opened URL
+==================================================
+downloaded 35 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/digest_0.6.4.tgz'
+Content type 'application/x-gzip' length 103487 bytes (101 Kb)
+opened URL
+==================================================
+downloaded 101 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/testthat_0.8.1.tgz'
+Content type 'application/x-gzip' length 220188 bytes (215 Kb)
+opened URL
+==================================================
+downloaded 215 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/roxygen2_3.1.0.tgz'
+Content type 'application/x-gzip' length 368874 bytes (360 Kb)
+opened URL
+==================================================
+downloaded 360 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/knitr_1.5.tgz'
+Content type 'application/x-gzip' length 861792 bytes (841 Kb)
+opened URL
+==================================================
+downloaded 841 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/rstudioapi_0.1.tgz'
+Content type 'application/x-gzip' length 13345 bytes (13 Kb)
+opened URL
+==================================================
+downloaded 13 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/devtools_1.5.tgz'
+Content type 'application/x-gzip' length 242241 bytes (236 Kb)
+opened URL
+==================================================
+downloaded 236 Kb
+
+
+The downloaded binary packages are in
+	/var/folders/k6/f22b2rf90hjg01r_hr0n3yqw0000gn/T//Rtmp35iNs7/downloaded_packages
+Error: '.find.package' is defunct.
+Use 'find.package' instead.
+See help("Defunct")
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/BH_1.54.0-2.tgz'
+Content type 'application/x-gzip' length 6063916 bytes (5.8 Mb)
+opened URL
+==================================================
+downloaded 5.8 Mb
+
+
+The downloaded binary packages are in
+	/var/folders/k6/f22b2rf90hjg01r_hr0n3yqw0000gn/T//Rtmp35iNs7/downloaded_packages
+Warning: dependencies ‘graph’, ‘Rgraphviz’ are not available
+also installing the dependencies ‘dichromat’, ‘munsell’, ‘labeling’, ‘gtable’, ‘reshape2’, ‘scales’, ‘proto’, ‘ggplot2’, ‘RColorBrewer’, ‘reshape’, ‘plyr’
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/dichromat_2.0-0.tgz'
+Content type 'application/x-gzip' length 145112 bytes (141 Kb)
+opened URL
+==================================================
+downloaded 141 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/munsell_0.4.2.tgz'
+Content type 'application/x-gzip' length 124700 bytes (121 Kb)
+opened URL
+==================================================
+downloaded 121 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/labeling_0.2.tgz'
+Content type 'application/x-gzip' length 38219 bytes (37 Kb)
+opened URL
+==================================================
+downloaded 37 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/gtable_0.1.2.tgz'
+Content type 'application/x-gzip' length 61078 bytes (59 Kb)
+opened URL
+==================================================
+downloaded 59 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/reshape2_1.4.tgz'
+Content type 'application/x-gzip' length 178438 bytes (174 Kb)
+opened URL
+==================================================
+downloaded 174 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/scales_0.2.4.tgz'
+Content type 'application/x-gzip' length 150093 bytes (146 Kb)
+opened URL
+==================================================
+downloaded 146 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/proto_0.3-10.tgz'
+Content type 'application/x-gzip' length 454741 bytes (444 Kb)
+opened URL
+==================================================
+downloaded 444 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/ggplot2_0.9.3.1.tgz'
+Content type 'application/x-gzip' length 2649787 bytes (2.5 Mb)
+opened URL
+==================================================
+downloaded 2.5 Mb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/RColorBrewer_1.0-5.tgz'
+Content type 'application/x-gzip' length 22751 bytes (22 Kb)
+opened URL
+==================================================
+downloaded 22 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/reshape_0.8.5.tgz'
+Content type 'application/x-gzip' length 125088 bytes (122 Kb)
+opened URL
+==================================================
+downloaded 122 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/plyr_1.8.1.tgz'
+Content type 'application/x-gzip' length 837044 bytes (817 Kb)
+opened URL
+==================================================
+downloaded 817 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/profileR_0.2-1.tgz'
+Content type 'application/x-gzip' length 61686 bytes (60 Kb)
+opened URL
+==================================================
+downloaded 60 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/profr_0.3.1.tgz'
+Content type 'application/x-gzip' length 23366 bytes (22 Kb)
+opened URL
+==================================================
+downloaded 22 Kb
+
+trying URL 'http://streaming.stat.iastate.edu/CRAN/bin/macosx/contrib/3.1/proftools_0.1-0.tgz'
+Content type 'application/x-gzip' length 70705 bytes (69 Kb)
+opened URL
+==================================================
+downloaded 69 Kb
+
+
+The downloaded binary packages are in
+	/var/folders/k6/f22b2rf90hjg01r_hr0n3yqw0000gn/T//Rtmp35iNs7/downloaded_packages
+> z <- list(matrix(1:10, nrow=2), matrix(11:20, nrow=2))
+> lapply(z, "[", 1, )
+[[1]]
+[1] 1 3 5 7 9
+
+[[2]]
+[1] 11 13 15 17 19
+
+> lapply(z, "[", , 3)
+[[1]]
+[1] 5 6
+
+[[2]]
+[1] 15 16
+
+> z[1]
+[[1]]
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    3    5    7    9
+[2,]    2    4    6    8   10
+
+> z[2]
+[[1]]
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   11   13   15   17   19
+[2,]   12   14   16   18   20
+
+> z <- list(a=matrix(1:10, nrow=2), b=matrix(11:20, nrow=2))
+> lapply(z, "[", 1, )
+$a
+[1] 1 3 5 7 9
+
+$b
+[1] 11 13 15 17 19
+
+> z <- list(a=data.frame(1:10, nrow=2), b=data.frame(11:20, nrow=2))
+> z
+$a
+   X1.10 nrow
+1      1    2
+2      2    2
+3      3    2
+4      4    2
+5      5    2
+6      6    2
+7      7    2
+8      8    2
+9      9    2
+10    10    2
+
+$b
+   X11.20 nrow
+1      11    2
+2      12    2
+3      13    2
+4      14    2
+5      15    2
+6      16    2
+7      17    2
+8      18    2
+9      19    2
+10     20    2
+
+> z <- list(a=matrix(1:10, nrow=2), b=matrix(11:20, nrow=2))
+> lapply(z, "$", 1, )
+Error in FUN(X[[1L]], ...) : $ operator is invalid for atomic vectors
+> lapply(z, "$", "a", )
+Error in FUN(X[[1L]], ...) : $ operator is invalid for atomic vectors
+> lapply(z, "$", "a")
+Error in FUN(X[[1L]], ...) : $ operator is invalid for atomic vectors
+> z$a
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    3    5    7    9
+[2,]    2    4    6    8   10
+> as.data.frame(z$a)
+  V1 V2 V3 V4 V5
+1  1  3  5  7  9
+2  2  4  6  8 10
+> z$a <- as.data.frame(z$a)
+> z$b <- as.data.frame(z$b)
+> z
+$a
+  V1 V2 V3 V4 V5
+1  1  3  5  7  9
+2  2  4  6  8 10
+
+$b
+  V1 V2 V3 V4 V5
+1 11 13 15 17 19
+2 12 14 16 18 20
+
+> lapply(z, "$", V1)
+$a
+NULL
+
+$b
+NULL
+
+> lapply(z, "$", "V1")
+$a
+NULL
+
+$b
+NULL
+
+> lapply(z, "$")
+$a
+NULL
+
+$b
+NULL
+
+> z
+$a
+  V1 V2 V3 V4 V5
+1  1  3  5  7  9
+2  2  4  6  8 10
+
+$b
+  V1 V2 V3 V4 V5
+1 11 13 15 17 19
+2 12 14 16 18 20
+
+> lapply(z, "$",1)
+$a
+NULL
+
+$b
+NULL
+
+> lapply(z, "$","1")
+$a
+NULL
+
+$b
+NULL
+
+> lapply(z, "[",V2)
+Error in `[.data.frame`(X[[1L]], ...) : object 'V2' not found
+> lapply(z, "[","V2")
+$a
+  V2
+1  3
+2  4
+
+$b
+  V2
+1 13
+2 14
+
+> lapply(z, "[",1,)
+$a
+  V1 V2 V3 V4 V5
+1  1  3  5  7  9
+
+$b
+  V1 V2 V3 V4 V5
+1 11 13 15 17 19
+
+> 

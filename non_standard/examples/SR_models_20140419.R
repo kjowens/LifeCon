@@ -81,7 +81,7 @@ pv.ou.fcb <- function(fcb, sr, theta, phi, t) {
 			mydates <- fcb$cfdf$dates
 			mycfs <- fcb$cfdf$cfs
 			incl <- ifelse(mydates>t,1,0) # don't incl pmnt at valuation date
-			dum <- function(x) {zcb.ou.pv(r0, theta, phi, tstart=t, x)}
+			dum <- function(x) {zcb.ou.pv(sr, theta, phi, tstart=t, x)}
 			disc <- vapply(mydates,1,FUN=dum)
 			out <- sum(incl * disc * mycfs)
 		};
@@ -90,3 +90,9 @@ pv.ou.fcb <- function(fcb, sr, theta, phi, t) {
 
 fcb$pv <- pv.ou.fcb(fcb, r0, theta, phi, t=currdate)
 fcb$pv
+
+library(lifecontingencies)
+getirr <- function(p) {
+	(presentValue(cashFlows=fcb$cfdf$cfs, timeIds=(fcb$cfdf$dates - fcb$issuedate),interestRates=p) - fcb$pv)^2
+}
+fcb$ytm <- nlm(f=getirr, p=.1)$estimate
