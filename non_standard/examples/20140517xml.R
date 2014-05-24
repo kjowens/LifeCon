@@ -20,7 +20,7 @@ SOAtbl2Matrix.agg <- function(tblnumb) {
 	return(out)
 }
 
-# SOAtbl2Matrix.agg(1585) <- 
+SOAtbl2Matrix.agg(1585)
 
 # require(RUnit)
 # test.SOAtbl2Matrix.agg <- function() {

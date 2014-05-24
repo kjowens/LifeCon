@@ -3,7 +3,7 @@
 library(rbenchmark)
 
 # fun <- function() {
-source("/Volumes/amy/LifeCon/R/Actuarial.R")
+source("/Volumes/hd500/LifeCon/LifeCon/R/Actuarial.R")
 
 # Profit test example from Actuarial Mathematics for Life Contingent Risks,
 # section 11.2

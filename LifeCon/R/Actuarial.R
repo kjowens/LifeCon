@@ -645,8 +645,9 @@ qOY2qmthly <- function(q,m,FAA) {
 
 BenFactors <- function(OYq, i, PB=PolBasis) {
 	# TODO: change to use OYT, one year term
+	# policy holder pv benefit factors
 	out <- NULL
-	end <- PB$SurvFactor
+	end <- PB$SurvFactor # 0 for term, 1 for WL, endowment ins.
 	freq <- PB$BenFreq
 	q <- qOY2qmthly(q=OYq, m=freq, FAA=PB$FAA)
 	v <- .DiscountFact(i,m=freq) * .ones(freq*PB$TermDur)
