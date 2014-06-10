@@ -655,6 +655,20 @@ BenFactors <- function(OYq, i, PB=PolBasis) {
 	return(out)
 }
 
+BenFactors2 <- function(OYq, i, PB=PolBasis) {
+	# TODO: change to use OYT, one year term
+	# policy holder pv benefit factors
+	out <- NULL
+	end <- PB$SurvFactor # 0 for term, 1 for WL, endowment ins.
+	freq <- PB$BenFreq
+	q <- qOY2qmthly(q=OYq, m=freq, FAA=PB$FAA)
+	v <- .DiscountFact(i,m=freq) * .ones(freq*PB$TermDur)
+	out <- BLFOR(q*v, (1-q)*v, end)
+	return(out)
+}
+
+
+
 PremFactors <- function(OYq, i, PB=PolBasis) {
 	out <- NULL
 	end <- 0 # not reasonable for them to pay a premium at the end
@@ -672,8 +686,9 @@ PremFactors <- function(OYq, i, PB=PolBasis) {
 }
 
 
-# get parameter value
+
 .gpv <- function(df, param, type="numb") {
+	# get parameter value
 	out <- NULL
 	bar <- df[which(df$Parameter==param),"Value"]
 	out <- switch(type, numb=as.numeric(levels(bar)[bar]),

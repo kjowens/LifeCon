@@ -70,7 +70,7 @@ pmnts <- 100*runif(length(times))
 benchmark(get.irr.gerber(times, spot.rates, pmnts), get.irr.nlm(times, spot.rates, pmnts))
 
 
-trials <- 50
+trials <- 100
 res <- numeric(trials)
 for (i in 1:trials) {
 	times <- 1:361
