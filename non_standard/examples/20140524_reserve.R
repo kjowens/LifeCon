@@ -90,17 +90,20 @@ get.qs.agg(tbl, 27, 37)
 		eval(parse(text=txt))
 	}
 }
-iss.date <- 2015
-iss.age <- 30
-pol.mort <- "tbl"
-pol.omega <- .evaltxt(paste("attributes(",pol.mort,")$omega",sep=""))
-pol.term <- 10
-pol.term <- ifelse(is.na(pol.term),max(0,pol.omega-iss.age),pol.term)
-pol.ben.freq <- 0 # pays benefits continuously
-pol.prem.freq <- 2 # premium paid semi-anually
-cur.pol.vol <- 1 # policy volume, number of policies in policy record
+
+
+mp <- list()
+mp$iss.date <- 2015
+mp$iss.age <- 30
+mp$pol.mort <- "tbl"
+mp$pol.omega <- .evaltxt(paste("attributes(",pol.mort,")$omega",sep=""))
+mp$pol.term <- 10
+mp$pol.term <- ifelse(is.na(pol.term),max(0,pol.omega-iss.age),pol.term)
+mp$pol.ben.freq <- 0 # pays benefits continuously
+mp$pol.prem.freq <- 2 # premium paid semi-anually
+mp$cur.pol.vol <- 1 # policy volume, number of policies in policy record
 # cur b/c we need to evaluate the policy volume at a point in time
-# all policies could have lapsed or died at a previous time
+# all policies could have lapsed or died at a previous time <- 
 pol.vol.prec <- 1e-5 # policy volume precision, if less than this consider it gone
 
 
@@ -122,6 +125,8 @@ pol.vol.prec <- 1e-5 # policy volume precision, if less than this consider it go
 # dates expressed as floating point numbers, units in years
 
 cur.date <- 2016 # current date is a property of the current state
+
+is.inforce <- function(date) {}
 
 cur.iss.elapse <- (cur.date - iss.date)
 cur.age <- iss.age + cur.iss.elapse
@@ -148,3 +153,11 @@ get.xs.agg(.evaltxt(pol.mort), floor(cur.age), ceiling(cur.age+cur.term))
 
 # get.qs.agg(.evaltxt(pol.mort), floor(cur.age), ceiling(cur.age+Inf))
 # so, it's a problem if it's infinite, maybe just need to be strict about making a table; any assumptions about too young or too old need to be address when making the table
+
+# do everything monthly
+# 2014-06-05
+
+# tbl
+# iss.age <- 25
+# pol.term <- 20
+# iss.date <- 2014
